@@ -26,17 +26,19 @@ for f in files:
 print("Concatenating data...")
 data = pd.concat(dfs, ignore_index=True)
 
-# 필요없는 속성 삭제
-print("Dropping unnecessary columns...")
-data.drop(columns=[
-	'Jurisdiction', 'Kind', 'Display Key', 'Lens ID', 'Application Number', 'Priority Numbers',
-	'Inventors', 'Owners', 'URL', 'Document Type', 'Has Full Text', 'Cites Patent Count',
-	'Simple Family Size', 'Simple Family Members', 'Simple Family Member Jurisdictions',
-	'Extended Family Size', 'Extended Family Members', 'Extended Family Member Jurisdictions',
-	'Sequence Count', 'IPCR Classifications', 'US Classifications', 'NPL Citation Count',
-	'NPL Resolved Citation Count', 'NPL Resolved Lens ID(s)', 'NPL Resolved External ID(s)',
-	'NPL Citations'
-], inplace=True)
+# 필요한 속성만 선택하도록
+print("Selecting required columns...")
+required_columns = [
+    'Publication Date', 'Publication Year', 'Application Date',
+    'Earliest Priority Date', 'Title', 'Abstract', 'Applicants',
+    'Cited by Patent Count', 'CPC Classifications', 'Legal Status'
+]
+
+existing_cols = [c for c in required_columns if c in data.columns]
+missing_cols = [c for c in required_columns if c not in data.columns]
+if missing_cols:
+    print(f"Warning: these required columns are missing and will be skipped: {missing_cols}")
+data = data[existing_cols].copy()
 
 # DataFrame 정보 출력
 print("DataFrame info:")
