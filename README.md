@@ -18,7 +18,7 @@
 │   ├── 🐍 ALL_Topic_mining.py
 │   ├── 📄 bertopic_ForALL_documents.csv     # 확인한 문서 데이터
 │   └── 📄 bertopic_ForALL_topics.csv     # 추출한 토픽 데이터
-├── 📁 intrahepatic-cholangiocarcinoma
+├── 📁 intrahepatic-cholangiocarcinoma     # 예시로 토픽 하나를 뽑아 추출해 봤습니다.
 │   ├── 📄 bertopic_intrahepatic-cholangiocarcinoma_documents.csv     # 확인한 문서 데이터
 │   ├── 📄 bertopic_intrahepatic-cholangiocarcinoma_topics.csv     # 추출한 문서 데이터
 │   ├── 📄 intrahepatic-cholangiocarcinoma-data.csv
