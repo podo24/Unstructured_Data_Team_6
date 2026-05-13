@@ -1,2 +1,4 @@
 *.csv
 *.jsonl
+!bertopic_ForALL_topics.csv
+!intrahepatic-cholangiocarcinoma/bertopic_intrahepatic-cholangiocarcinoma_topics.csv
