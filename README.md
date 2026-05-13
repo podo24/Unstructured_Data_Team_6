@@ -2,7 +2,6 @@
 # File Tree: Unstructured_Data_Team_6
 
 **Generated:** 2026. 5. 13. 오후 11:32:16
-**Root Path:** `c:\Users\socia\Downloads\Github\Unstructured_Data_Team_6`
 
 ```
 ├── 📁 ALL_Topic     # 항암제 관련 모든 특허를 모아 토픽을 뽑았습니다
@@ -21,7 +20,7 @@
 │   └── 📄 bertopic_ForALL_topics.csv     # 추출한 토픽 데이터
 ├── 📁 intrahepatic-cholangiocarcinoma
 │   ├── 📄 bertopic_intrahepatic-cholangiocarcinoma_documents.csv     # 확인한 문서 데이터
-│   ├── 📄 bertopic_intrahepatic-cholangiocarcinoma_topics.csv     #추출한 문서 데이터
+│   ├── 📄 bertopic_intrahepatic-cholangiocarcinoma_topics.csv     # 추출한 문서 데이터
 │   ├── 📄 intrahepatic-cholangiocarcinoma-data.csv
 │   ├── 📄 intrahepatic-cholangiocarcinoma-data.jsonl
 │   └── 🐍 intrahepatic-cholangiocarcinoma-mining.py
