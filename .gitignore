@@ -1,2 +1,2 @@
-bertopic_intrahepatic-cholangiocarcinoma_documents.csv
-intrahepatic-cholangiocarcinoma-data.jsonl
+*.csv
+*.jsonl
