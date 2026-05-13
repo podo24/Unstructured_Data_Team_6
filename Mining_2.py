@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from bertopic import BERTopic
 from sentence_transformers import SentenceTransformer
 from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.decomposition import PCA
+from umap import UMAP
 import re
 import torch
 import nltk
@@ -18,7 +18,8 @@ from multiprocessing import Pool
 # ==========================================
 
 bad_words = ['usa', 'korea', 'china', 'japan', 'germany', 'france', 'uk', 'india',
-             'tif', 'tiff', 'jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx', 'xls', 'xlsx']
+             'tif', 'tiff', 'jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx', 'xls', 'xlsx',
+             'embodiments', 'seq', 'id', 'mg', 'ml']
 bad_pattern_str = r'\b(' + '|'.join(bad_words) + r')\b'
 
 def extract_text(val):
@@ -41,7 +42,7 @@ def extract_text(val):
 def clean_text_worker(text_series):
     bad_pattern = re.compile(bad_pattern_str, flags=re.IGNORECASE)
     
-    result = text_series.str.replace(r'[^a-zA-Z\s]', ' ', regex=True).str.lower()
+    result = text_series.str.replace(r'[^a-zA-Z0-9\-\s]', ' ', regex=True).str.lower()
     result = result.str.replace(bad_pattern, '', regex=True)
     result = result.str.replace(r'\s+', ' ', regex=True).str.strip()
     return result
@@ -83,6 +84,39 @@ if __name__ == '__main__':
     data = table.to_pandas()
     data = data.set_index(data.columns[0])
 
+    # Family 특허 제거 (동일 패밀리는 1건만 남김)
+    print("Removing family patents...")
+    family_members_col = None
+    for col in ['Simple Family Members', 'Extended Family Members']:
+        if col in data.columns:
+            family_members_col = col
+            break
+
+    if family_members_col:
+        before = len(data)
+        if 'Earliest Priority Date' in data.columns:
+            data = data.sort_values('Earliest Priority Date')
+        lens_col = 'Lens ID' if 'Lens ID' in data.columns else None
+        if lens_col:
+            family_key = data[family_members_col].fillna(data[lens_col])
+        else:
+            family_key = data[family_members_col].fillna(data.index.astype(str))
+        data = data.loc[~family_key.duplicated()].copy()
+        print(f"Removed {before - len(data)} family patents using {family_members_col}.")
+    else:
+        family_size_col = None
+        for col in ['Simple Family Size', 'Extended Family Size']:
+            if col in data.columns:
+                family_size_col = col
+                break
+        if family_size_col:
+            before = len(data)
+            family_size = pd.to_numeric(data[family_size_col], errors='coerce').fillna(1)
+            data = data.loc[family_size <= 1].copy()
+            print(f"Removed {before - len(data)} family patents using {family_size_col}.")
+        else:
+            print("Warning: no family columns found; skipping family patent removal.")
+
     # Abstract과 description과 claims를 합쳐서 텍스트 데이터로 사용
     print("Combining Title and Abstract into a single text column...")
     data['text'] = (
@@ -98,16 +132,17 @@ if __name__ == '__main__':
     # BeaTopic 실행
     print("Initializing BERTopic...")
     device = 'cuda' if torch.cuda.is_available() else exit("No GPU available, exiting...")
-    embedding_model = SentenceTransformer("all-MiniLM-L6-v2", device=device)
+    # embedding_model = SentenceTransformer("all-MiniLM-L6-v2", device=device)
+    embedding_model = SentenceTransformer("pritamdeka/S-PubMedBERT-MS-MARCO", device=device)
     texts = data['text'].tolist()
     embeddings = embedding_model.encode(texts, show_progress_bar=True, batch_size=128, convert_to_numpy=True)
 
-    pca_model = PCA(n_components=5, svd_solver="randomized", random_state=42)
+    umap_model = UMAP(n_components=5, n_neighbors=15, min_dist=0.1, metric="cosine", random_state=42)
     vectorizer_model = CountVectorizer(stop_words="english", max_features=5000)
 
     model = BERTopic(
         embedding_model=None,
-        umap_model=pca_model,
+        umap_model=umap_model,
         vectorizer_model=vectorizer_model,
         verbose=True
     )
