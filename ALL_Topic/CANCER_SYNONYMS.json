@@ -1,0 +1,223 @@
+{
+  "non small cell lung cancer": [
+    "non small cell lung cancer",
+    "non small cell lung carcinoma",
+    "lung adenocarcinoma",
+    "lung squamous cell carcinoma",
+    "large cell lung carcinoma"
+  ],
+  "small cell lung cancer": [
+    "small cell lung cancer",
+    "small cell lung carcinoma"
+  ],
+  "mesothelioma & thymoma": [
+    "mesothelioma",
+    "thymoma",
+    "thymic carcinoma",
+    "thymic tumor"
+  ],
+  "lung cancer (general)": [
+    "lung cancer",
+    "lung carcinoma",
+    "lung tumor"
+  ],
+  "gastric cancer": [
+    "gastric cancer",
+    "gastric adenocarcinoma",
+    "stomach cancer"
+  ],
+  "esophageal cancer": [
+    "esophageal cancer",
+    "esophageal squamous cell carcinoma"
+  ],
+  "colon cancer": [
+    "colon cancer"
+  ],
+  "rectal & anal cancer": [
+    "rectal cancer",
+    "anal cancer",
+    "anal squamous cell carcinoma"
+  ],
+  "other gi tumors": [
+    "gastrointestinal stromal tumor",
+    "neuroendocrine tumor",
+    "gastroenteropancreatic neuroendocrine tumor",
+    "appendiceal cancer",
+    "small intestine cancer"
+  ],
+  "colorectal cancer (general)": [
+    "colorectal cancer",
+    "colorectal carcinoma"
+  ],
+  "hepatocellular carcinoma": [
+    "hepatocellular carcinoma",
+    "liver cancer"
+  ],
+  "biliary & gallbladder cancer": [
+    "cholangiocarcinoma",
+    "intrahepatic cholangiocarcinoma",
+    "extrahepatic cholangiocarcinoma",
+    "bile duct cancer",
+    "gallbladder cancer",
+    "ampullary cancer"
+  ],
+  "pancreatic cancer": [
+    "pancreatic cancer",
+    "pancreatic ductal adenocarcinoma",
+    "pancreatic neuroendocrine tumor"
+  ],
+  "oral & oropharyngeal cancer": [
+    "oral cancer",
+    "oral cavity cancer",
+    "oropharyngeal cancer",
+    "lip cancer"
+  ],
+  "pharyngeal & laryngeal cancer": [
+    "nasopharyngeal cancer",
+    "nasopharyngeal carcinoma",
+    "hypopharyngeal cancer",
+    "laryngeal cancer"
+  ],
+  "salivary gland cancer": [
+    "salivary gland cancer",
+    "adenoid cystic carcinoma"
+  ],
+  "head and neck cancer (general)": [
+    "head and neck cancer",
+    "head and neck squamous cell carcinoma"
+  ],
+  "triple negative breast cancer": [
+    "triple negative breast cancer"
+  ],
+  "her2 positive & hr positive breast cancer": [
+    "her2 positive breast cancer",
+    "hormone receptor positive breast cancer",
+    "er positive breast cancer"
+  ],
+  "breast cancer (general)": [
+    "breast cancer",
+    "ductal carcinoma in situ",
+    "lobular carcinoma in situ",
+    "inflammatory breast cancer"
+  ],
+  "cervical cancer": [
+    "cervical cancer",
+    "cervical carcinoma"
+  ],
+  "ovarian cancer": [
+    "ovarian cancer",
+    "fallopian tube cancer",
+    "primary peritoneal cancer"
+  ],
+  "uterine & endometrial cancer": [
+    "endometrial cancer",
+    "uterine cancer",
+    "uterine sarcoma"
+  ],
+  "vaginal & vulvar cancer": [
+    "vaginal cancer",
+    "vulvar cancer",
+    "gestational trophoblastic disease"
+  ],
+  "kidney cancer": [
+    "renal cell carcinoma",
+    "clear cell renal cell carcinoma",
+    "papillary renal cell carcinoma",
+    "kidney cancer"
+  ],
+  "urothelial & bladder cancer": [
+    "bladder cancer",
+    "urothelial carcinoma",
+    "ureteral cancer",
+    "urethral cancer"
+  ],
+  "testicular & penile cancer": [
+    "testicular cancer",
+    "germ cell tumor",
+    "penile cancer"
+  ],
+  "prostate cancer": [
+    "prostate cancer",
+    "castration resistant prostate cancer",
+    "hormone sensitive prostate cancer"
+  ],
+  "glioma & glioblastoma": [
+    "glioma",
+    "glioblastoma",
+    "glioblastoma multiforme",
+    "astrocytoma",
+    "oligodendroglioma",
+    "ependymoma"
+  ],
+  "other brain tumors": [
+    "meningioma",
+    "schwannoma",
+    "medulloblastoma",
+    "neuroblastoma",
+    "pituitary tumor"
+  ],
+  "melanoma": [
+    "melanoma",
+    "malignant melanoma"
+  ],
+  "non melanoma skin cancer": [
+    "basal cell carcinoma",
+    "squamous cell carcinoma",
+    "merkel cell carcinoma"
+  ],
+  "acute leukemias": [
+    "acute myeloid leukemia",
+    "acute lymphoblastic leukemia",
+    "acute promyelocytic leukemia"
+  ],
+  "chronic leukemias": [
+    "chronic myeloid leukemia",
+    "chronic lymphocytic leukemia"
+  ],
+  "hodgkin lymphoma": [
+    "hodgkin lymphoma",
+    "hodgkins disease"
+  ],
+  "non hodgkin lymphoma": [
+    "non hodgkin lymphoma",
+    "diffuse large b cell lymphoma",
+    "follicular lymphoma",
+    "mantle cell lymphoma",
+    "t cell lymphoma",
+    "cutaneous t cell lymphoma"
+  ],
+  "myeloma & bone marrow disorders": [
+    "multiple myeloma",
+    "myelodysplastic syndrome",
+    "myeloproliferative neoplasm"
+  ],
+  "bone sarcoma": [
+    "osteosarcoma",
+    "ewing sarcoma",
+    "chondrosarcoma"
+  ],
+  "soft tissue sarcoma": [
+    "soft tissue sarcoma",
+    "rhabdomyosarcoma",
+    "liposarcoma",
+    "angiosarcoma",
+    "leiomyosarcoma",
+    "synovial sarcoma",
+    "epithelioid sarcoma",
+    "kaposi sarcoma"
+  ],
+  "eye cancer": [
+    "retinoblastoma",
+    "uveal melanoma"
+  ],
+  "thyroid & endocrine cancer": [
+    "thyroid cancer",
+    "papillary thyroid cancer",
+    "follicular thyroid cancer",
+    "medullary thyroid cancer",
+    "anaplastic thyroid cancer",
+    "adrenocortical carcinoma",
+    "pheochromocytoma",
+    "parathyroid cancer"
+  ]
+}
