@@ -1,6 +1,7 @@
 import pandas as pd
 import pyarrow.json as paj
 import numpy as np
+from pathlib import Path
 from bertopic import BERTopic
 from sentence_transformers import SentenceTransformer
 from sklearn.feature_extraction.text import CountVectorizer
@@ -12,9 +13,10 @@ from multiprocessing import Pool
 # ==========================================
 # 1. 전역 변수 및 함수 정의 (워커 프로세스가 접근 가능하도록 최상단에 배치)
 # ==========================================
-DATA_PATH = 'intrahepatic-cholangiocarcinoma-data.jsonl'
-TOPIC_CSV_PATH = 'bertopic_intrahepatic-cholangiocarcinoma_topics.csv'
-DOCS_CSV_PATH = 'bertopic_intrahepatic-cholangiocarcinoma_documents.csv'
+BASE_DIR = Path(__file__).resolve().parent
+DATA_PATH = BASE_DIR / 'intrahepatic-cholangiocarcinoma-data.jsonl'
+TOPIC_CSV_PATH = BASE_DIR / 'bertopic_intrahepatic-cholangiocarcinoma_topics.csv'
+DOCS_CSV_PATH = BASE_DIR / 'bertopic_intrahepatic-cholangiocarcinoma_documents.csv'
 READ_BLOCK_SIZE = 52428800
 DEFAULT_NUM_CORES = 6
 EMBEDDING_MODEL_NAME = "pritamdeka/S-PubMedBERT-MS-MARCO"

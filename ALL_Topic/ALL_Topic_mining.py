@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from pathlib import Path
 from bertopic import BERTopic
 from sentence_transformers import SentenceTransformer
 from sklearn.feature_extraction.text import CountVectorizer
@@ -16,8 +17,9 @@ DATA_FILES = [
     '2022-data.csv', '2021-data.csv', '2020-data.csv', '2019-data.csv',
     '2018-data.csv', '2017-data.csv'
 ]
-TOPIC_CSV_PATH = 'bertopic_ForALL_topics.csv'
-DOCS_CSV_PATH = 'bertopic_ForALL_documents.csv'
+BASE_DIR = Path(__file__).resolve().parent
+TOPIC_CSV_PATH = BASE_DIR / 'bertopic_ForALL_topics.csv'
+# DOCS_CSV_PATH = 'bertopic_ForALL_documents.csv'
 DEFAULT_NUM_CORES = 6
 EMBEDDING_MODEL_NAME = "pritamdeka/S-PubMedBERT-MS-MARCO"
 EMBEDDING_BATCH_SIZE = 128
@@ -34,50 +36,6 @@ CUSTOM_STOP_WORDS = [
     'embodiments', 'seq', 'id', 'mg', 'ml'
 ]
 STOP_WORDS_PATTERN_STR = r'\b(' + '|'.join(CUSTOM_STOP_WORDS) + r')\b'
-
-def extract_text(value):
-    """
-    다양한 데이터 타입(dict, list 등)에서 문자열만 추출하는 함수입니다.
-    
-    Args:
-        value (any): 추출할 원본 데이터
-        
-    Returns:
-        str: 추출된 문자열
-    """
-    try:
-        if pd.isna(value):
-            return ''
-    except ValueError:
-        # 배열이나 리스트 등의 경우 pd.isna 에서 에러가 발생할 수 있으므로 패스
-        pass
-        
-    if isinstance(value, dict):
-        # 딕셔너리인 경우 값들만 추출하여 공백으로 연결
-        return ' '.join(str(v) for v in value.values() if v is not None)
-    elif isinstance(value, (list, np.ndarray)):
-        # 리스트 또는 Numpy 배열인 경우 문자열로 연결
-        return ' '.join(str(v) for v in value if v is not None)
-        
-    return str(value) if value is not None else ''
-
-def clean_text_worker(text_series):
-    """
-    텍스트 정제를 수행하는 워커(Worker) 함수입니다. (멀티프로세싱 용도)
-    - 특수문자 제거, 소문자 변환, 사용자 정의 불용어 제거 및 다중 공백 단일화 처리
-    
-    Args:
-        text_series (pd.Series): 정제 작업을 수행할 텍스트 열(Series)
-        
-    Returns:
-        pd.Series: 정제 처리가 완료된 텍스트 열
-    """
-    bad_pattern = re.compile(STOP_WORDS_PATTERN_STR, flags=re.IGNORECASE)
-    
-    result = text_series.str.replace(r'[^a-zA-Z0-9\-\s]', ' ', regex=True).str.lower()
-    result = result.str.replace(bad_pattern, '', regex=True)
-    result = result.str.replace(r'\s+', ' ', regex=True).str.strip()
-    return result
 
 def parallelize_dataframe(series, func, num_cores=6):
     """
@@ -107,30 +65,49 @@ def parallelize_dataframe(series, func, num_cores=6):
     
     return pd.concat(results)
 
-def _extract_max_probability(prob_array):
+def clean_text_worker(text_series):
     """
-    다차원 확률 배열에서 최대 확률 값을 추출하는 내부(Helper) 함수입니다.
+    텍스트 정제를 수행하는 워커(Worker) 함수입니다. (멀티프로세싱 용도)
+    - 특수문자 제거, 소문자 변환, 사용자 정의 불용어 제거 및 다중 공백 단일화 처리
     
     Args:
-        prob_array (list or array): 토픽별 확률 값 배열
+        text_series (pd.Series): 정제 작업을 수행할 텍스트 열(Series)
         
     Returns:
-        float: 배열 중 제일 높은(max) 확률 값. 배열이 비었거나 불량할 경우 NaN 반환.
+        pd.Series: 정제 처리가 완료된 텍스트 열
     """
-    try:
-        if prob_array is None:
-            return float('nan')
-        arr = np.array(prob_array)
-        if arr.size == 0:
-            return float('nan')
-        return float(np.max(arr))
-    except Exception:
-        return float('nan')
+    bad_pattern = re.compile(STOP_WORDS_PATTERN_STR, flags=re.IGNORECASE)
+    
+    result = text_series.str.replace(r'[^a-zA-Z0-9\-\s]', ' ', regex=True).str.lower()
+    result = result.str.replace(bad_pattern, '', regex=True)
+    result = result.str.replace(r'\s+', ' ', regex=True).str.strip()
+    return result
+
+# def _extract_max_probability(prob_array):
+#     """
+#     다차원 확률 배열에서 최대 확률 값을 추출하는 내부(Helper) 함수입니다.
+    
+#     Args:
+#         prob_array (list or array): 토픽별 확률 값 배열
+        
+#     Returns:
+#         float: 배열 중 제일 높은(max) 확률 값. 배열이 비었거나 불량할 경우 NaN 반환.
+#     """
+#     try:
+#         if prob_array is None:
+#             return float('nan')
+#         arr = np.array(prob_array)
+#         if arr.size == 0:
+#             return float('nan')
+#         return float(np.max(arr))
+#     except Exception:
+#         return float('nan')
 
 def _load_csv_files(file_list):
     dataframes = []
     for file_path in file_list:
-        dataframes.append(pd.read_csv(file_path, index_col=0, engine='pyarrow'))
+        csv_path = BASE_DIR / file_path
+        dataframes.append(pd.read_csv(csv_path, index_col=0, engine='pyarrow'))
     return dataframes
 
 def _remove_family_patents(merged_data):
@@ -225,14 +202,14 @@ def _save_results(bertopic_model, merged_data, topics, probabilities):
     if topic_info is not None:
         topic_info.to_csv(TOPIC_CSV_PATH, index=False)
 
-    # 개별 문서가 어떤 토픽에 가장 가깝고, 그 확률(Probability)이 얼마인지 정리 후 저장
-    doc_probabilities = [_extract_max_probability(prob) for prob in probabilities]
-    document_result_df = pd.DataFrame({
-        'text': merged_data['text'],
-        'topic': topics,
-        'probability': doc_probabilities
-    })
-    document_result_df.to_csv(DOCS_CSV_PATH, index=False)
+    # # 개별 문서가 어떤 토픽에 가장 가깝고, 그 확률(Probability)이 얼마인지 정리 후 저장
+    # doc_probabilities = [_extract_max_probability(prob) for prob in probabilities]
+    # document_result_df = pd.DataFrame({
+    #     'text': merged_data['text'],
+    #     'topic': topics,
+    #     'probability': doc_probabilities
+    # })
+    # document_result_df.to_csv(DOCS_CSV_PATH, index=False)
 
 def main():
     print("Reading data files...")
