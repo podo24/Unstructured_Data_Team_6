@@ -1,5 +1,4 @@
 *.csv
 *.jsonl
-!bertopic_ForALL_topics.csv
-!bertopic_intrahepatic-cholangiocarcinoma_topics.csv
-!bertopic_bile-duct-cancer_topics.csv
+*.bat
+!*_topics*.csv

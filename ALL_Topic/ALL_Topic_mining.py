@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 from bertopic import BERTopic
+from hdbscan import HDBSCAN
 from sentence_transformers import SentenceTransformer
 from sklearn.feature_extraction.text import CountVectorizer
 from umap import UMAP
@@ -21,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent
 TOPIC_CSV_PATH = BASE_DIR / 'bertopic_ForALL_topics.csv'
 # DOCS_CSV_PATH = 'bertopic_ForALL_documents.csv'
 DEFAULT_NUM_CORES = 6
-EMBEDDING_MODEL_NAME = "pritamdeka/S-PubMedBERT-MS-MARCO"
+EMBEDDING_MODEL_NAME = "AI-Growth-Lab/PatentSBERTa"
 EMBEDDING_BATCH_SIZE = 128
 REQUIRED_COLUMNS = [
     'Publication Date', 'Publication Year', 'Application Date',
@@ -180,13 +181,17 @@ def _build_embeddings(texts_list, device):
     )
 
 def _build_bertopic_model():
-    umap_model = UMAP(n_components=5, n_neighbors=15, min_dist=0.1, metric="cosine", random_state=42)
+    umap_model = UMAP(n_components=5, n_neighbors=50, min_dist=0, metric="cosine", random_state=42)
     vectorizer_model = CountVectorizer(stop_words="english", max_features=5000)
+    hdbscan_model = HDBSCAN(min_cluster_size=30, metric='euclidean', cluster_selection_method='eom', prediction_data=True)
 
     return BERTopic(
         embedding_model=None,
         umap_model=umap_model,
+        hdbscan_model=hdbscan_model,
         vectorizer_model=vectorizer_model,
+        min_topic_size=30,
+        # nr_topics="auto",
         verbose=True
     )
 
@@ -223,6 +228,9 @@ def main():
     # [Step 3] Family 특허 중복 제거 (동일 구조를 갖는 패밀리 특허는 1건만 남김)
     print("Removing family patents...")
     merged_data = _remove_family_patents(merged_data)
+
+    print("Data Count")
+    print(merged_data.shape[0])
 
     # [Step 4] 분석에 필요한 필수 속성(Column)만 추출
     print("Selecting required columns...")
